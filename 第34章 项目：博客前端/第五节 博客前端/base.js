@@ -1,7 +1,3 @@
-/*
-
-
-*/
 
 // 前台调用
 var $ = function (_this) {
@@ -12,7 +8,7 @@ var $ = function (_this) {
 function Base(_this) {
     //创建一个数组，来保存获取的节点和节点数组
     this.elements = [];
-    if (_this != undefined) {   //_this是一个对象，undefined也是一个对象，区别于typeof返回的带单引号的'undefined'
+    if (_this != undefined) { //_this是一个对象，undefined也是一个对象，区别于typeof返回的带单引号的'undefined'
         this.elements[0] = _this;
     };
 }
@@ -32,15 +28,15 @@ Base.prototype.getTagName = function (tag) {
     return this;
 }
 //获取CLASS节点数组
-Base.prototype.getClass = function (className,idName) {
+Base.prototype.getClass = function (className, idName) {
     var node = null;
     if (arguments.length == 2) {
         node = document.getElementById(idName);
-    }else {
+    } else {
         node = document;
     }
     var all = node.getElementsByTagName('*');
-    for (var i = 0;i <all.length;i++) {
+    for (var i = 0; i < all.length; i++) {
         if (all[i].className == className) {
             this.elements.push(all[i]);
         }
@@ -56,55 +52,54 @@ Base.prototype.getElement = function (num) {
     return this;
 }
 
-
 //设置CSS
 Base.prototype.css = function (attr, value) {
     for (var i = 0; i < this.elements.length; i++) {
-        if(arguments.length == 1){
-            return getStyle(this.elements[i],attr);
+        if (arguments.length == 1) {
+            return getStyle(this.elements[i], attr);
         }
-        this.elements[i].style[attr] = value;      
+        this.elements[i].style[attr] = value;
     }
     return this;
 }
 
 //添加Class
 Base.prototype.addClass = function (className) {
-    for (var i = 0;i < this.elements.length; i++) {
-        if (!hasClass(this.elements[i],className)) {
+    for (var i = 0; i < this.elements.length; i++) {
+        if (!hasClass(this.elements[i], className)) {
             this.elements[i].className += ' ' + className;
-        } 
+        }
     }
     return this;
 }
 //移除Class
 Base.prototype.removeClass = function (className) {
-	for (var i = 0; i < this.elements.length; i ++) {
-		if (hasClass(this.elements[i],className)) {
-			this.elements[i].className = this.elements[i].className.replace(new RegExp('(\\s|^)' +className +'(\\s|$)'), ' ');
-		}
-	}
-	return this;
+    for (var i = 0; i < this.elements.length; i++) {
+        if (hasClass(this.elements[i], className)) {
+            this.elements[i].className = this.elements[i].className.replace(new RegExp('(\\s|^)' + className + '(\\s|$)'), ' ');
+        }
+    }
+    return this;
 }
 
 //添加link或style的CSS规则
 Base.prototype.addRule = function (num, selectorText, cssText, position) {
-	var sheet = document.styleSheets[num];
-	insertRule(sheet, selectorText, cssText, position);
-	return this;
+    var sheet = document.styleSheets[num];
+    insertRule(sheet, selectorText, cssText, position);
+    return this;
 }
 
 //移除link或style的CSS规则
 Base.prototype.removeRule = function (num, index) {
-	var sheet = document.styleSheets[num];
-	deleteRule(sheet, index);
-	return this;
+    var sheet = document.styleSheets[num];
+    deleteRule(sheet, index);
+    return this;
 }
 
 //设置innerHtml
 Base.prototype.html = function (str) {
     for (var i = 0; i < this.elements.length; i++) {
-        if(arguments.length == 0) {
+        if (arguments.length == 0) {
             return this.elements[i].innerHTML;
         }
         this.elements[i].innerHTML = str;
@@ -121,7 +116,7 @@ Base.prototype.click = function (fn) {
 }
 
 //设置鼠标移入移除方法
-Base.prototype.hover = function (over,out) {
+Base.prototype.hover = function (over, out) {
     for (var i = 0; i < this.elements.length; i++) {
         this.elements[i].onmouseover = over;
         this.elements[i].onmouseout = out;
@@ -148,7 +143,7 @@ Base.prototype.hide = function () {
 
 //设置物体居中
 Base.prototype.center = function (width, height) {
-    var top =(document.documentElement.clientHeight - width) / 2;
+    var top = (document.documentElement.clientHeight - width) / 2;
     var left = (document.documentElement.clientWidth - height) / 2;
     for (var i = 0; i < this.elements.length; i++) {
         this.elements[i].style.top = top + 'px';
@@ -159,7 +154,18 @@ Base.prototype.center = function (width, height) {
 
 //触发浏览器窗口事件
 Base.prototype.resize = function (fn) {
-    window.onresize = fn;
+    for (var i = 0; i < this.elements.length; i++) {
+        var element = this.elements[i];
+        window.onresize = function () {
+            fn();
+            if (element.offsetLeft > getInner().width - element.offsetWidth) {
+                element.style.left = getInner().width - element.offsetWidth + 'px';
+            }
+            if (element.offsetTop > getInner().height - element.offsetHeight) {
+				element.style.top = getInner().height - element.offsetHeight + 'px';
+			}
+        };
+    }
     return this;
 }
 
@@ -169,12 +175,57 @@ Base.prototype.lock = function () {
         this.elements[i].style.width = getInner().width + 'px';
         this.elements[i].style.height = getInner().height + 'px';
         this.elements[i].style.display = 'block';
+        document.documentElement.style.overflow = 'hidden';
     }
     return this;
 }
 Base.prototype.unlock = function () {
     for (var i = 0; i < this.elements.length; i++) {
         this.elements[i].style.display = 'none';
+        document.documentElement.style.overflow = 'auto';
+    }
+    return this;
+}
+
+//拖拽功能
+Base.prototype.drag = function () {
+    for (var i = 0; i < this.elements.length; i++) {
+        this.elements[i].onmousedown = function (e) {
+            preDef(e);
+            var e = getEvent(e);
+            var _this = this;
+            var diffX = e.clientX - _this.offsetLeft; //点击的点到窗口左边的距离-div左边到窗口左边的距离=点击点到div左边的距离
+            var diffY = e.clientY - _this.offsetTop;
+			if (typeof _this.setCapture != 'undefined') {
+				_this.setCapture();
+			} 
+            document.onmousemove = function (e) {
+                var e = getEvent(e);
+                var left = e.clientX - diffX;
+                var top = e.clientY - diffY;
+
+                if (left < 0) {
+                    left = 0;
+                }else if (left >getInner().width - _this.offsetWidth) {
+                    left = getInner().width - _this.offsetWidth;
+                }
+				if (top < 0) {
+					top = 0;
+				} else if (top > getInner().height - _this.offsetHeight) {
+					top = getInner().height - _this.offsetHeight;
+				}
+                _this.style.left = left + 'px';  //点击之后动态获取点击点到窗口左边的距离
+                _this.style.top = top + 'px';
+            }
+            document.onmouseup = function () {
+                this.onmousemove = null;
+                this.onmouseup = null;
+                if (typeof _this.releaseCapture != 'undefined') {
+					_this.releaseCapture();
+				}
+            }
+        
+        }
     }
     return this;
 }

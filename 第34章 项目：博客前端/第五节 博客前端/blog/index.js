@@ -11,15 +11,14 @@ $().getClass('m-member').hover(function () {
 //登录框---动态判断高宽没有做
 var login = $().getId('j-login');
 var screen = $().getId('j-screen');
-login.center(350,250);
-$().resize(function () {
-    login.center(350,250);
+login.center(350,250).resize(function () {   
     if (login.css('display') == 'block') {
         screen.lock();
     }
 });
 $().getClass('login').click(function () {
     login.css('display','block');
+    login.center(350,250);
     screen.lock();
 });
 $().getClass('j-close').click(function () {
@@ -28,21 +27,9 @@ $().getClass('j-close').click(function () {
 }); 
 
 //拖拽
-var oDiv = document.getElementById('j-login');
-oDiv.onmousedown = function (e) {
-    var diffX = e.clientX - oDiv.offsetLeft; //点击的点到窗口左边的距离-div左边到窗口左边的距离=点击点到div左边的距离
-    var diffY = e.clientY - oDiv.offsetTop;
-    document.onmousemove = function () {
-        var e = getEvent(e);
-        oDiv.style.left = e.clientX - diffX + 'px';  //点击之后动态获取点击点到窗口左边的距离
-        oDiv.style.top = e.clientY - diffY + 'px';
-    }
-    document.onmouseup = function () {
-        document.onmousemove = null;
-        document.onmouseup = null;
-    }
+login.drag();
+//var oDiv = document.getElementById('j-login');
 
-}
 
 
 /*
