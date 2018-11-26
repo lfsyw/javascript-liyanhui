@@ -61,12 +61,7 @@ Base.prototype.getElement = function (num) {
 Base.prototype.css = function (attr, value) {
     for (var i = 0; i < this.elements.length; i++) {
         if(arguments.length == 1){
-            if (typeof window.getComputedStyle != 'undefined') { //W3C
-                return window.getComputedStyle(this.elements[i],null)[attr];
-            } else if (typeof this.elements[i].currentStyle != 'undefined') { //IE
-                return this.elements[i].currentStyle[attr];
-            }
-            //return this.elements[i].style[attr];   //获取行内的css
+            return getStyle(this.elements[i],attr);
         }
         this.elements[i].style[attr] = value;      
     }
@@ -76,7 +71,7 @@ Base.prototype.css = function (attr, value) {
 //添加Class
 Base.prototype.addClass = function (className) {
     for (var i = 0;i < this.elements.length; i++) {
-        if (!this.elements[i].className.match(new RegExp('(\\s|^)' +className +'(\\s|$)'))) {
+        if (!hasClass(this.elements[i],className)) {
             this.elements[i].className += ' ' + className;
         } 
     }
@@ -85,7 +80,7 @@ Base.prototype.addClass = function (className) {
 //移除Class
 Base.prototype.removeClass = function (className) {
 	for (var i = 0; i < this.elements.length; i ++) {
-		if (this.elements[i].className.match(new RegExp('(\\s|^)' +className +'(\\s|$)'))) {
+		if (hasClass(this.elements[i],className)) {
 			this.elements[i].className = this.elements[i].className.replace(new RegExp('(\\s|^)' +className +'(\\s|$)'), ' ');
 		}
 	}
@@ -95,28 +90,19 @@ Base.prototype.removeClass = function (className) {
 //添加link或style的CSS规则
 Base.prototype.addRule = function (num, selectorText, cssText, position) {
 	var sheet = document.styleSheets[num];
-	if (typeof sheet.insertRule != 'undefined') {//W3C
-		sheet.insertRule(selectorText + '{' + cssText + '}', position);
-	} else if (typeof sheet.addRule != 'undefined') {//IE
-		sheet.addRule(selectorText, cssText, position);
-	}
+	insertRule(sheet, selectorText, cssText, position);
 	return this;
 }
 
 //移除link或style的CSS规则
 Base.prototype.removeRule = function (num, index) {
 	var sheet = document.styleSheets[num];
-	if (typeof sheet.deleteRule != 'undefined') {//W3C
-		sheet.deleteRule(index);
-	} else if (typeof sheet.removeRule != 'undefined') {//IE
-		sheet.removeRule(index);
-	}
+	deleteRule(sheet, index);
 	return this;
 }
 
 //设置innerHtml
 Base.prototype.html = function (str) {
-
     for (var i = 0; i < this.elements.length; i++) {
         if(arguments.length == 0) {
             return this.elements[i].innerHTML;
@@ -153,6 +139,40 @@ Base.prototype.show = function () {
 
 //设置显示
 Base.prototype.hide = function () {
+    for (var i = 0; i < this.elements.length; i++) {
+        this.elements[i].style.display = 'none';
+    }
+    return this;
+}
+
+
+//设置物体居中
+Base.prototype.center = function (width, height) {
+    var top =(document.documentElement.clientHeight - width) / 2;
+    var left = (document.documentElement.clientWidth - height) / 2;
+    for (var i = 0; i < this.elements.length; i++) {
+        this.elements[i].style.top = top + 'px';
+        this.elements[i].style.left = left + 'px';
+    }
+    return this;
+}
+
+//触发浏览器窗口事件
+Base.prototype.resize = function (fn) {
+    window.onresize = fn;
+    return this;
+}
+
+//锁屏功能
+Base.prototype.lock = function () {
+    for (var i = 0; i < this.elements.length; i++) {
+        this.elements[i].style.width = getInner().width + 'px';
+        this.elements[i].style.height = getInner().height + 'px';
+        this.elements[i].style.display = 'block';
+    }
+    return this;
+}
+Base.prototype.unlock = function () {
     for (var i = 0; i < this.elements.length; i++) {
         this.elements[i].style.display = 'none';
     }
