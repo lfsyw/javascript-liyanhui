@@ -118,8 +118,10 @@ Base.prototype.click = function (fn) {
 //设置鼠标移入移除方法
 Base.prototype.hover = function (over, out) {
     for (var i = 0; i < this.elements.length; i++) {
-        this.elements[i].onmouseover = over;
-        this.elements[i].onmouseout = out;
+        // this.elements[i].onmouseover = over;
+        // this.elements[i].onmouseout = out;
+        addEvent(this.elements[i],'mouseover', over);
+        addEvent(this.elements[i],'mouseout', out);
     }
     return this;
 }
@@ -143,8 +145,8 @@ Base.prototype.hide = function () {
 
 //设置物体居中
 Base.prototype.center = function (width, height) {
-    var top = (document.documentElement.clientHeight - width) / 2;
-    var left = (document.documentElement.clientWidth - height) / 2;
+    var top = (getInner().height - width) / 2;
+    var left = (getInner().width - height) / 2;
     for (var i = 0; i < this.elements.length; i++) {
         this.elements[i].style.top = top + 'px';
         this.elements[i].style.left = left + 'px';
@@ -156,7 +158,16 @@ Base.prototype.center = function (width, height) {
 Base.prototype.resize = function (fn) {
     for (var i = 0; i < this.elements.length; i++) {
         var element = this.elements[i];
-        window.onresize = function () {
+        // window.onresize = function () {
+        //     fn();
+        //     if (element.offsetLeft > getInner().width - element.offsetWidth) {
+        //         element.style.left = getInner().width - element.offsetWidth + 'px';
+        //     }
+        //     if (element.offsetTop > getInner().height - element.offsetHeight) {
+		// 		element.style.top = getInner().height - element.offsetHeight + 'px';
+		// 	}
+        // };
+        addEvent(window,'resize',function () {
             fn();
             if (element.offsetLeft > getInner().width - element.offsetWidth) {
                 element.style.left = getInner().width - element.offsetWidth + 'px';
@@ -164,7 +175,7 @@ Base.prototype.resize = function (fn) {
             if (element.offsetTop > getInner().height - element.offsetHeight) {
 				element.style.top = getInner().height - element.offsetHeight + 'px';
 			}
-        };
+        });
     }
     return this;
 }
@@ -176,6 +187,16 @@ Base.prototype.lock = function () {
         this.elements[i].style.height = getInner().height + 'px';
         this.elements[i].style.display = 'block';
         document.documentElement.style.overflow = 'hidden';
+        /*
+		addEvent(this.elements[i], 'mousedown', function (e) {
+			e.preventDefault();
+			addEvent(document, 'mousemove', function (e) {
+				e.preventDefault();
+			});
+		});
+        */
+        addEvent(window,'scroll',scrollTop);
+
     }
     return this;
 }
@@ -183,6 +204,7 @@ Base.prototype.unlock = function () {
     for (var i = 0; i < this.elements.length; i++) {
         this.elements[i].style.display = 'none';
         document.documentElement.style.overflow = 'auto';
+        removeEvent(window,'scroll',scrollTop);
     }
     return this;
 }
@@ -190,17 +212,24 @@ Base.prototype.unlock = function () {
 //拖拽功能
 Base.prototype.drag = function () {
     for (var i = 0; i < this.elements.length; i++) {
-        this.elements[i].onmousedown = function (e) {
-            preDef(e);  //阻止默认行为
-            var e = getEvent(e);
+        //this.elements[i].onmousedown = function (e) {
+        addEvent(this.elements[i],'mousedown',function (e) {
+            //preDef(e);  //阻止默认行为 
+            if (trim(this.innerHTML).length == 0) e.preventDefault();  //判断内容是否为空阻止默认行为
             var _this = this;
             var diffX = e.clientX - _this.offsetLeft; //点击的点到窗口左边的距离-div左边到窗口左边的距离=点击点到div左边的距离
             var diffY = e.clientY - _this.offsetTop;
-			if (typeof _this.setCapture != 'undefined') {
-				_this.setCapture();
-			} 
-            document.onmousemove = function (e) {
-                var e = getEvent(e);
+            
+           if (e.target.tagName == 'H2') {
+                //document.onmousemove = function (e) {}
+                addEvent(document,'mousemove',move);
+                //document.onmouseup = function () {}
+                addEvent(document,'mouseup',up);
+           } else {
+               removeEvent(document,'mousemove',move);
+               removeEvent(document,'mouseup',up);
+           }
+            function move (e) {
                 var left = e.clientX - diffX;
                 var top = e.clientY - diffY;
 
@@ -209,23 +238,31 @@ Base.prototype.drag = function () {
                 }else if (left >getInner().width - _this.offsetWidth) {
                     left = getInner().width - _this.offsetWidth;
                 }
+
 				if (top < 0) {
 					top = 0;
 				} else if (top > getInner().height - _this.offsetHeight) {
 					top = getInner().height - _this.offsetHeight;
-				}
+                }
+                
                 _this.style.left = left + 'px';  //点击之后动态获取点击点到窗口左边的距离
                 _this.style.top = top + 'px';
+
+                if (typeof _this.setCapture != 'undefined') {
+                    _this.setCapture();
+                } 
             }
-            document.onmouseup = function () {
-                this.onmousemove = null;
-                this.onmouseup = null;
+            function up () {
+                //this.onmousemove = null;
+                removeEvent(document,'mousemove',move);
+                // this.onmouseup = null;
+                removeEvent(document,'mouseup',up);
                 if (typeof _this.releaseCapture != 'undefined') {
-					_this.releaseCapture();
-				}
+                    _this.releaseCapture();
+                }
             }
         
-        }
+        });
     }
     return this;
 }
