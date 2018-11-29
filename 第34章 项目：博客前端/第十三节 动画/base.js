@@ -166,7 +166,7 @@ Base.prototype.eq = function (num) {
 Base.prototype.css = function (attr, value) {
     for (var i = 0; i < this.elements.length; i++) {
         if (arguments.length == 1) {
-            return getStyle(this.elements[i], attr) + 'px';
+            return getStyle(this.elements[i], attr);
         }
         this.elements[i].style[attr] = value;
     }
@@ -307,8 +307,13 @@ Base.prototype.animate = function (obj) {
         var attr =  obj['attr'] == 'x' ? 'left' : 
                     obj['attr'] == 'y' ? 'top' :                   
                     obj['attr'] == 'w' ? 'width' :
-                    obj['attr'] == 'h' ? 'height' : 'left' ;                            //可选，left和top，width和height值，不传递默认为left
-        var start = obj['start'] != undefined ? obj['start'] : getStyle(element,attr);  //可选，默认是css的起始位置
+                    obj['attr'] == 'h' ? 'height' : 
+                    obj['attr'] == 'o' ? 'opacity' : 'left' ;                            //可选，left和top，width和height值，不传递默认为left
+        
+        var start = obj['start'] != undefined ? obj['start'] : 
+                    attr == 'opacity' ? parseFloat(getStyle(element,attr)) * 100 :
+                                        parseInt(getStyle(element,attr));   
+        
         var t = obj['t'] != undefined ? obj['t'] : 50;                                 //可选，默认是50毫秒执行一次
         var step = obj['step'] != undefined ? obj['step'] : 10;		                   //可选，每次运行10像素
 
@@ -325,12 +330,22 @@ Base.prototype.animate = function (obj) {
 		}
 
         if (start > target) step = -step;
-        element.style[attr] = start + 'px';
+
+        if (attr == 'opacity') {
+            element.style.opacity = start /100;
+            element.style.filter = 'alpha(opacity='+ start +')';
+        } else {
+            element.style[attr] = start + 'px';
+        }
+
+       //alert(start);
+
         clearInterval(window.timer);
         timer =setInterval(function () {
 
             if (type == 'buffer') {
-				step = (target - getStyle(element, attr)) / speed;
+                step = attr == 'opacity' ? (target - parseFloat(getStyle(element, attr)) * 100) / speed :
+                                            (target - parseInt(getStyle(element, attr))) / speed ;
 				step = step > 0 ? Math.ceil(step) : Math.floor(step);   
 			}
 
@@ -357,23 +372,45 @@ Base.prototype.animate = function (obj) {
 
 			289 - 300 = abs(-11) 11 < 7 = false
             */
-            
-            if (step == 0) {
-                setTarget();
-            } else if (step > 0 && Math.abs(getStyle(element,attr)-target) <= step) { 
-                setTarget();  
-            } else if (step < 0 && (getStyle(element,attr)-target) <= Math.abs(step)){
-                setTarget();
-            } else {
-                //放在else永远不会和停止运动同时执行，就不会出现303同时剪到300的问题
-                //但是会出现不同时剪到300的问题，导致突兀
-                element.style[attr] = getStyle(element,attr) + step + 'px';  
+            if (attr == 'opacity') {
+                
+                if (step == 0) {
+                    setOpacity()
+                } else if (step > 0 && Math.abs(parseFloat(getStyle(element,attr)) * 100 -target) <= step) { 
+                    setOpacity()  
+                } else if (step < 0 && (parseFloat(getStyle(element,attr)) * 100 -target) <= Math.abs(step)){
+                    setOpacity()
+                } else {
+                    var temp = element.style.opacity = parseFloat(getStyle(element, attr)) * 100;
+                    element.style.opacity = parseInt(temp + step) / 100;
+                    element.style.filter = 'alpha(opacity'+ parseInt(temp + step) +')';
+                }
+                
+
             }
-            document.getElementById('aaa').innerHTML += step + '</br>';
+            else {
+                if (step == 0) {
+                    setTarget();
+                } else if (step > 0 && Math.abs(parseInt(getStyle(element,attr))-target) <= step) { 
+                    setTarget();  
+                } else if (step < 0 && (parseInt(getStyle(element,attr))-target) <= Math.abs(step)){
+                    setTarget();
+                } else {
+                    //放在else永远不会和停止运动同时执行，就不会出现303同时剪到300的问题
+                    //但是会出现不同时剪到300的问题，导致突兀
+                    element.style[attr] = parseInt(getStyle(element,attr)) + step + 'px';  
+                }
+            } 
+          // document.getElementById('aaa').innerHTML += getStyle(element,attr) + '</br>';
         }, t);
 
         function setTarget() {
             element.style[attr] = target + 'px';
+            clearInterval(timer);
+        }
+        function setOpacity() {
+            element.style.opacity = parseInt(target) /100;
+            element.style.filter = 'alpha(opacity'+ parseInt(target) +')';
             clearInterval(timer);
         }
     }

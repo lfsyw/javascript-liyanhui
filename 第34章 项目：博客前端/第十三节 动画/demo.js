@@ -22,10 +22,11 @@ $(function () {
 $(function () {
 	$('#button').click(function () {
         $('#box').animate({
-            attr: 'x',
-            alter : 50,
-            step : 7,
-            speed : 10,   
+            'attr' : 'o',
+            'start' : 30,
+            'target': 100,
+            'step' : 7, 
+            'type' : 0,
         });
     });
 });
