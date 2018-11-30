@@ -44,12 +44,16 @@ a {
 	top: 30px;
 	left: 0;
 	width: 88px;
-	height: 120px;
+	height: 0;
 	padding: 10px 0 0 0;
 	border: 1px solid #999;
 	border-top: none;
-	background: #f1f1f1;
+	background: #FBF7E1;
 	display: none;
+	opacity: 0;
+	filter: alpha(opacity=0);
+	-webkit-filter: alpha(opacity=0);
+	overflow: hidden;
 }
 .g-header .m-member ul li {
 	height: 25px;
@@ -76,13 +80,21 @@ a {
 .g-header .login:hover {
 	background: #fc0;
 }
+#test {
+	width:100px;
+	height:100px;
+	position:absolute;
+	top:100px;
+	left:100px;
+	background:red;
+}
 #j-screen {
 	position: absolute;
 	top: 0;
 	left: 0;
 	background: #000;
-	filter:alpha(opacity=30);
-	opacity: .3;
+	filter:alpha(opacity=0);
+	opacity: 0;
 	z-index: 9998;
 	display: none;
 }
