@@ -277,7 +277,49 @@ a {
   background-position: 5px -446px;
 }
 .g-nav {
+  position: relative;
   width: 465px;
   height: 52px;
-  background: url('') no-repeat;
+  background: url('images/nav_bg.png') no-repeat;
+  margin: 50px auto 0 auto;
+  cursor: pointer;
+}
+.g-nav ul {
+  position: absolute;
+}
+.g-nav ul li {
+  float: left;
+  width: 85px;
+  height: 52px;
+  line-height: 52px;
+  text-align: center;
+  font-weight: bold;
+}
+.g-nav .about {
+  left: 20px;
+  z-index: 4;
+  cursor: pointer;
+  background: #333;
+  filter: alpha(opacity=0);
+  opacity: 0;
+}
+.g-nav .black {
+  left: 20px;
+  z-index: 1;
+}
+.g-nav .nav_bg {
+  position: absolute;
+  top: 0;
+  left: 20px;
+  width: 85px;
+  height: 52px;
+  background: url('images/nav_over.png') no-repeat 0 11px;
+  z-index: 2;
+  overflow: hidden;
+}
+.g-nav .nav_bg .white {
+  left: 0;
+  width: 425px;
+  z-index: 3;
+  color: #fff;
 }
