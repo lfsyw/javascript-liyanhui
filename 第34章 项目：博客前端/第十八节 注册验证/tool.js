@@ -49,24 +49,24 @@ function addDomLoaded(fn) {
 		}, 1);
 	}
 }
-//跨浏览器事件绑定(现代事件绑定)
+//跨浏览器添加事件绑定
 function addEvent(obj, type, fn) {
 	if (typeof obj.addEventListener != 'undefined') {
 		obj.addEventListener(type, fn, false);
 	} else {
 		//创建一个存放事件的哈希表(散列表)
 		if (!obj.events) obj.events = {};
-		//第一次执行时
-		if (!obj.events[type]) {
+		//第一次执行时执行
+		if (!obj.events[type]) {	
 			//创建一个存放事件处理函数的数组
 			obj.events[type] = [];
-			//把第一次的事件处理函数储存到第一个位置上
+			//把第一次的事件处理函数先储存到第一个位置上
 			if (obj['on' + type]) obj.events[type][0] = fn;
 		} else {
 			//同一个注册函数进行屏蔽，不添加到计数器中
 			if (addEvent.equal(obj.events[type], fn)) return false;
 		}
-		//从第二次开始，我们用事件计数器来存储
+		//从第二次开始我们用事件计数器来存储
 		obj.events[type][addEvent.ID++] = fn;
 		//执行事件处理函数
 		obj['on' + type] = addEvent.exec;
@@ -182,6 +182,33 @@ function deleteRule(sheet, index) {
 		sheet.removeRule(index);
 	}
 }
+
+//跨浏览器获取innerText
+function getInnerText(element) {
+	return (typeof element.textContent == 'string') ? element.textContent : element.innerText;
+}
+//跨浏览器设置innerText
+function setInnerText(elememt, text) {
+	if (typeof element.textContent == 'string') {
+		element.textContent = text;
+	} else {
+		element.innerText = text;
+	}
+}
+
+//某一个值是否存在某一个数组中
+function inArray(array,value) {
+    for (var i in array) {
+        if (array[i] === value) return true;
+    }
+    return false;
+}
+
+
+
+
+
+
 
 //删除左右空格
 function trim(str) {

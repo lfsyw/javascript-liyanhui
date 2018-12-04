@@ -16,6 +16,10 @@ ul li {
 a {
 	text-decoration: none;
 }
+ul,dl,dd,h2,p,form {
+    padding: 0;
+    margin: 0;
+}
 .g-header {
 	width: 960px;
 	height: 30px;
@@ -156,14 +160,13 @@ a {
     .m-login;
     width: 600px;
     height: 550px;
-    display: block;
-    top: 10px;
-    left: 400px;
+    display: none;
     dl {
         font-size: 14px;
         color: #666;
         line-height: 30px;
         dd {
+            position: relative;
             display: flex;
             height: 30px;
             padding: 5px 0;
@@ -172,6 +175,7 @@ a {
                 text-align: right;
             }
             textarea {
+                width: 360px;
                 height: 100px;
                 resize: none;
                 background:#fff;
@@ -180,15 +184,164 @@ a {
             .submit {
                 width: 143px;
                 height: 33px;
-                margin: 20px auto;
                 background: url('./images/reg.png') no-repeat;
                 border:none;
                 cursor:pointer;
             }
+            .info,.error,.succ {
+                display: block;
+                position:absolute;
+                width: 165px;
+                height: 32px;
+                padding:0 0 0 35px;
+                line-height: 32px;
+                font-size: 12px;
+                letter-spacing:1px;
+                color: #333;      
+                display: none;
+            }
+            .info {
+                background:url('./images/reg_info.png') no-repeat;
+            }
+            .error {
+                background: url('./images/reg_error.png') no-repeat;
+            }
+            .succ {
+                height:14px;
+                line-height:14px;
+                background:url('./images/reg_succ.png') no-repeat;
+                padding:0 0 0 20px;
+                color:green;
+            }
+            .info_user {
+                height: 43px;
+                line-height: 18px;
+                padding-top: 7px;
+                background:url('./images/reg_info2.png') no-repeat;
+                top:3px;
+                left:295px;
+            }
+            .error_user {
+                top:3px;
+                left:295px;
+            }
+            .succ_user {
+                top:12px;
+                left:295px;
+            }
+
+            .info_pass {
+                display: none;
+                width:244px;
+                height:102px;
+                padding:4px 0 0 16px;
+                background:url('./images/reg_info3.png') no-repeat;
+                top: -33px;
+                left:295px;
+                letter-spacing:0;
+                p {
+                    height: 25px;
+                    line-height: 25px;
+                    color: #666;
+                    strong {
+                        font-size: 20px;
+                    }
+                    strong.s {
+                        color: #ccc;
+                    }
+                }
+
+            }
+            .error_pass {
+                top: 3px;
+                left: 295px;
+                
+            }
+            .succ_pass {
+                top: 13px;
+                left:295px;
+            }
+            .info_notpass {
+                top: 3px;
+                left:295px;
+                
+            }
+            .error_notpass {
+                top:3px;
+                left:295px;
+               
+            }
+            .succ_notpass {
+                top:12px;
+                left:295px;
+            }
+            .error_ques {
+                top:3px;
+                left:295px;
+            }
+            .info_ans {
+                top:3px;
+                left:295px;
+            }
+            .error_ans {
+                top:3px;
+                left:295px;
+            }
+            .succ_ans {
+                top:12px;
+                left:295px;
+            }
+            .info_email {
+                top:3px;
+                left:295px;
+            }
+            .error_email {
+                top:3px;
+                left:295px;
+            }
+            .succ_email {
+                top:12px;
+                left:295px;
+            }
+
+            .all_email {
+                position: absolute;
+                top: 33px;
+                left: 90px;
+                width: 180px;
+                height: 130px;
+                padding: 5px 10px;
+                border: 1px solid #ccc;
+                background: #fff;
+                z-index: 2;
+                display: none;
+                li {
+                    height: 25px;
+                    line-height: 25px;
+                    border-bottom: 1px solid #e5edf2;
+                    padding: 0 5px ;
+                    cursor: pointer;
+                }
+            }
+            .error_birthday {
+                top: 3px;
+                left: 295px;
+            }
+        }
+        .data {
+            select {
+                width: 62px;
+            }
+        }
+        .ps {
+            padding: 0 0 0 300px;
+        }
+        .clear {
+            color: #06f;
+            cursor: pointer;
         }
     }
 }
-
 
 
 #share {

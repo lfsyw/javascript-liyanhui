@@ -106,7 +106,7 @@ Base.prototype.getClass = function (className, parentNode) {
 
     var all = node.getElementsByTagName('*');
     for (var i = 0; i < all.length; i++) {
-        if (all[i].className == className) {
+        if ((new RegExp('(\\s|^)' +className +'(\\s|$)')).test(all[i].className)) {
             temps.push(all[i]);
         }
     }
@@ -152,6 +152,10 @@ Base.prototype.first = function () {
 //获取末个节点，并返回这个节点对象
 Base.prototype.last = function () {
     return this.elements[this.elements.length - 1];
+};
+//获取某族节点的数量
+Base.prototype.length = function () {
+    return this.elements.length;
 };
 //获取某一个节点，并返回Base对象
 Base.prototype.eq = function (num) {
@@ -222,6 +226,23 @@ Base.prototype.removeRule = function (num, index) {
     deleteRule(sheet, index);
     return this;
 }
+//设置表单字段元素
+Base.prototype.form = function (name) {
+    for (var i = 0; i < this.elements.length; i++) {
+        this.elements[i] = this.elements[i][name];
+    }
+    return this;
+}
+//设置表单字段内容获取
+Base.prototype.value = function (str) {
+    for (var i = 0; i < this.elements.length; i++) {
+        if (arguments.length == 0) {
+            return this.elements[i].value;
+        }
+        this.elements[i].value = str;
+    }
+    return this;
+}
 
 //设置innerHtml
 Base.prototype.html = function (str) {
@@ -233,11 +254,29 @@ Base.prototype.html = function (str) {
     }
     return this;
 }
+//设置innerText
+Base.prototype.text = function (str) {
+    for (var i = 0; i < this.elements.length; i++) {
+        if (arguments.length == 0) {
+            return getInnerText(this.elements[i]);
+        }
+        setInnerText(this.elements[i], text);
+    }
+    return this;
+}
 
 //触发点击事件
 Base.prototype.click = function (fn) {
     for (var i = 0; i < this.elements.length; i++) {
         this.elements[i].onclick = fn;
+    }
+    return this;
+}
+
+//设置事件发生器
+Base.prototype.bind = function (event,fn) {
+    for (var i = 0; i < this.elements.length; i++) {
+       addEvent (this.elements[i], event, fn);
     }
     return this;
 }

@@ -16,6 +16,15 @@ ul li {
 a {
   text-decoration: none;
 }
+ul,
+dl,
+dd,
+h2,
+p,
+form {
+  padding: 0;
+  margin: 0;
+}
 .g-header {
   width: 960px;
   height: 30px;
@@ -155,13 +164,10 @@ a {
   height: 250px;
   border: 1px solid #ccc;
   background: #fff;
-  display: none;
   z-index: 9999;
   width: 600px;
   height: 550px;
-  display: block;
-  top: 10px;
-  left: 400px;
+  display: none;
 }
 .m-reg h2 {
   height: 40px;
@@ -219,6 +225,7 @@ a {
   line-height: 30px;
 }
 .m-reg dl dd {
+  position: relative;
   display: flex;
   height: 30px;
   padding: 5px 0;
@@ -228,6 +235,7 @@ a {
   text-align: right;
 }
 .m-reg dl dd textarea {
+  width: 360px;
   height: 100px;
   resize: none;
   background: #fff;
@@ -236,9 +244,153 @@ a {
 .m-reg dl dd .submit {
   width: 143px;
   height: 33px;
-  margin: 20px auto;
   background: url('images/reg.png') no-repeat;
   border: none;
+  cursor: pointer;
+}
+.m-reg dl dd .info,
+.m-reg dl dd .error,
+.m-reg dl dd .succ {
+  display: block;
+  position: absolute;
+  width: 165px;
+  height: 32px;
+  padding: 0 0 0 35px;
+  line-height: 32px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: #333;
+  display: none;
+}
+.m-reg dl dd .info {
+  background: url('images/reg_info.png') no-repeat;
+}
+.m-reg dl dd .error {
+  background: url('images/reg_error.png') no-repeat;
+}
+.m-reg dl dd .succ {
+  height: 14px;
+  line-height: 14px;
+  background: url('images/reg_succ.png') no-repeat;
+  padding: 0 0 0 20px;
+  color: green;
+}
+.m-reg dl dd .info_user {
+  height: 43px;
+  line-height: 18px;
+  padding-top: 7px;
+  background: url('images/reg_info2.png') no-repeat;
+  top: 3px;
+  left: 295px;
+}
+.m-reg dl dd .error_user {
+  top: 3px;
+  left: 295px;
+}
+.m-reg dl dd .succ_user {
+  top: 12px;
+  left: 295px;
+}
+.m-reg dl dd .info_pass {
+  display: none;
+  width: 244px;
+  height: 102px;
+  padding: 4px 0 0 16px;
+  background: url('images/reg_info3.png') no-repeat;
+  top: -33px;
+  left: 295px;
+  letter-spacing: 0;
+}
+.m-reg dl dd .info_pass p {
+  height: 25px;
+  line-height: 25px;
+  color: #666;
+}
+.m-reg dl dd .info_pass p strong {
+  font-size: 20px;
+}
+.m-reg dl dd .info_pass p strong.s {
+  color: #ccc;
+}
+.m-reg dl dd .error_pass {
+  top: 3px;
+  left: 295px;
+}
+.m-reg dl dd .succ_pass {
+  top: 13px;
+  left: 295px;
+}
+.m-reg dl dd .info_notpass {
+  top: 3px;
+  left: 295px;
+}
+.m-reg dl dd .error_notpass {
+  top: 3px;
+  left: 295px;
+}
+.m-reg dl dd .succ_notpass {
+  top: 12px;
+  left: 295px;
+}
+.m-reg dl dd .error_ques {
+  top: 3px;
+  left: 295px;
+}
+.m-reg dl dd .info_ans {
+  top: 3px;
+  left: 295px;
+}
+.m-reg dl dd .error_ans {
+  top: 3px;
+  left: 295px;
+}
+.m-reg dl dd .succ_ans {
+  top: 12px;
+  left: 295px;
+}
+.m-reg dl dd .info_email {
+  top: 3px;
+  left: 295px;
+}
+.m-reg dl dd .error_email {
+  top: 3px;
+  left: 295px;
+}
+.m-reg dl dd .succ_email {
+  top: 12px;
+  left: 295px;
+}
+.m-reg dl dd .all_email {
+  position: absolute;
+  top: 33px;
+  left: 90px;
+  width: 180px;
+  height: 130px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  background: #fff;
+  z-index: 2;
+  display: none;
+}
+.m-reg dl dd .all_email li {
+  height: 25px;
+  line-height: 25px;
+  border-bottom: 1px solid #e5edf2;
+  padding: 0 5px ;
+  cursor: pointer;
+}
+.m-reg dl dd .error_birthday {
+  top: 3px;
+  left: 295px;
+}
+.m-reg dl .data select {
+  width: 62px;
+}
+.m-reg dl .ps {
+  padding: 0 0 0 300px;
+}
+.m-reg dl .clear {
+  color: #06f;
   cursor: pointer;
 }
 #share {
