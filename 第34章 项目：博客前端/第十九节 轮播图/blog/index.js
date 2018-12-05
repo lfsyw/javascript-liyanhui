@@ -1,4 +1,8 @@
-
+/*
+$(function () {
+    alert();
+});
+*/
 //个人中心
 $('.g-header .m-member').hover(function () {
     $(this).css('background', 'url(./images/arrow2.png) no-repeat 55px center');
@@ -94,6 +98,14 @@ $('#j-reg').drag($('#j-reg h2').last());
 //百度分享初始化位置
 $('#share').css('top', getScroll().top + (getInner().height - parseInt(getStyle($('#share').first(), 'height'))) / 2 + 'px');
 // 滚动条事件
+// addEvent(window,'scroll',function () {
+//     $('#share').animate ({
+//         attr : 'y',
+//         target : getScroll().top + (getInner().height - parseInt(getStyle($('#share').first(),'height'))) / 2,
+//         t : 10
+//     });   
+// });
+
 $(window).bind('scroll', function () {
     $('#share').animate({
         attr: 'y',
@@ -167,6 +179,31 @@ $('.g-sidebar h2').toggle(function () {
 //初始化表单操作
 $('form').first().reset();
 
+//alert($('form').first().user.placeholder);
+
+// $('form').form('user').placeholder('888');
+
+// $('form').form('user').bind('focus',function () {
+//     $('#j-reg .info_user').css('display','block');
+//     $('#j-reg .error_user').css('display', 'none');
+// 	$('#j-reg .succ_user').css('display', 'none');
+// }).bind('blur',function () {
+//     if(trim($(this).value()) == ''){
+//         $('#j-reg .info_user').css('display', 'none');
+//         $('#j-reg .error_user').css('display', 'none');
+//         $('#j-reg .succ_user').css('display', 'none');
+//     } else if (!/[a-zA-Z0-9_]{2,20}/.test(trim($(this).value()))) {
+//         alert('错误');
+//         $('#j-reg .error_user').css('display','block');
+//         $('#j-reg .info_user').css('display', 'none');
+// 		$('#j-reg .succ_user').css('display', 'none');
+//     } else {
+//         alert('正确')
+//         $('#j-reg .succ_user').css('display', 'block');
+//         $('#j-reg .error_user').css('display', 'none');
+//         $('#j-reg .info_user').css('display', 'none');
+//     }
+// });
 $('form').form('user').bind('focus', function () {
     $('#j-reg .info_user').css('display', 'block');
     $('#j-reg .error_user').css('display', 'none');
@@ -434,6 +471,9 @@ $('form').form('email').bind('keyup', function (event) {
 });
 
 //电子邮件补全系统点击获取
+// $('#j-reg .all_email li').click(function () {
+//     alert();
+// });
 //PS: click事件是点击弹起后出发的，而blur失去了焦点后，没有点击弹起元素，导致无法触发
 $('#j-reg .all_email li').bind('mousedown', function () {
     $('form').form('email').value($(this).text());
@@ -466,6 +506,8 @@ for (var i = 1; i <= 12; i++) {
     month.first().add(new Option(i, i), undefined);
 }
 
+//alert(inArray(day31,1))
+//alert(typeof parseInt(month.value()))
 year.bind('change', select_day);
 month.bind('change', select_day);
 
@@ -575,77 +617,3 @@ $('form').form('sub').click(function () {
     }
 
 });
-
-
-
-//轮播器初始化
-//$('.g-banner img').css('display','none');
-//$('.g-banner img').eq(0).css('display','block');
-$('.g-banner img').opacity(0);
-$('.g-banner img').eq(0).opacity(100);
-$('.g-banner ul li').eq(0).css('color','#000');
-$('.g-banner strong').html($('.g-banner img').eq(0).attr('alt'));
-
-//轮播器计数器
-var banner_index = 1;
-
-//轮播器的种类
-var banner_type = 1;
-
-//自动轮播器
-var banner_timer = setInterval(banner_fn, 3000);
-
-//手动轮播器
-$('.g-banner ul li').hover(function () {
-    clearInterval(banner_timer);
-
-    if ($(this).css('color') != 'rgb(51, 51, 51)' && $(this).css('color') != '#333') { //如果是非选定状态
-        banner(this,banner_index == 0 ? $('.g-banner ul li').length() - 1 : banner_index - 1);
-    }
-   
-}, function () {
-    banner_index = $(this).index() + 1;
-    banner_timer = setInterval(banner_fn, 3000);
-});
-
-function banner(obj,prev) {
-
-    $('.g-banner ul li').css('color', '#999');
-    $(obj).css('color', '#333');
-    $('.g-banner strong').html($('.g-banner img').eq($(obj).index()).attr('alt'));
-
-    if (banner_type == 1) {
-        $('.g-banner img').eq(prev).animate({
-            attr : 'o',
-            target : 100,
-            t : 30,
-            step : 10
-        }).css('zIndex',1);
-        $('.g-banner img').eq($(obj).index()).animate({
-            attr : 'o',
-            target : 100,
-            t : 30,
-            step : 10
-        }).css('zIndex',2);
-    } else if (banner_type == 2) {
-        $('.g-banner img').eq(prev).animate({
-            attr : 'y',
-            target : 150,
-            t : 30,
-            step : 10
-        }).css('zIndex',1).opacity(100);
-        $('.g-banner img').eq($(obj).index()).animate({
-            attr : 'y',
-            target : 0,
-            t : 30,
-            step : 10
-        }).css('top','-150px').css('zIndex',2).opacity(100);
-    }
-
-}
-
-function banner_fn() {
-    if (banner_index >= $('.g-banner ul li').length()) banner_index = 0;
-    banner($('.g-banner ul li').eq(banner_index).first(),banner_index == 0 ? $('.g-banner ul li').length() - 1 : banner_index - 1);
-    banner_index++;
-}

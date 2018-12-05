@@ -569,7 +569,7 @@ form {
 .g-main .g-index {
   float: right;
   width: 630px;
-  height: 570px;
+  height: 500px;
   background: #eee;
 }
 .g-sidebar {
@@ -603,50 +603,4 @@ form {
 }
 .g-sidebar ul li a {
   color: #333;
-}
-.g-banner {
-  position: relative;
-  float: left;
-  width: 900px;
-  height: 150px;
-  margin: 10px 0;
-  overflow: hidden;
-}
-.g-banner img {
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-}
-.g-banner ul {
-  position: absolute;
-  top: 122px;
-  left: 420px;
-  z-index: 4;
-}
-.g-banner ul li {
-  float: left;
-  padding: 0 5px;
-  font-size: 24px;
-  color: #999;
-  cursor: pointer;
-}
-.g-banner span {
-  position: absolute;
-  top: 125px;
-  left: 0;
-  width: 900px;
-  height: 25px;
-  background: #333;
-  opacity: 0.3;
-  filter: alpha(opacity=30);
-  z-index: 3;
-}
-.g-banner strong {
-  position: absolute;
-  top: 130px;
-  left: 10px;
-  color: #fff;
-  z-index: 4;
 }

@@ -153,22 +153,10 @@ Base.prototype.first = function () {
 Base.prototype.last = function () {
     return this.elements[this.elements.length - 1];
 };
-//获取某组节点的数量
+//获取某族节点的数量
 Base.prototype.length = function () {
     return this.elements.length;
 };
-//获取某一个节点的属性
-Base.prototype.attr = function (attr) {
-	return this.elements[0][attr];
-};
-//获取某一个节点在整个节点组中是第几个索引
-Base.prototype.index = function () {
-	var children = this.elements[0].parentNode.children;
-	for (var i = 0; i < children.length; i ++) {
-		if (this.elements[0] == children[i]) return i;
-	}
-};
-
 //获取某一个节点，并返回Base对象
 Base.prototype.eq = function (num) {
     var element = this.elements[num];
@@ -195,16 +183,6 @@ Base.prototype.prev = function () {
 	}
 	return this;
 };
-
-//设置某一节点的透明度
-Base.prototype.opacity = function (num) {
-    for (var i = 0; i < this.elements.length; i++) {
-        this.elements[i].style.opacity = num / 100;
-        this.elements[i].style.filter = 'alpha(opacity)' + num + ')';
-    }
-    return this;
-}
-
 //设置CSS
 Base.prototype.css = function (attr, value) {
     for (var i = 0; i < this.elements.length; i++) {
